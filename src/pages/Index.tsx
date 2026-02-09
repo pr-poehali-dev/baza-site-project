@@ -243,11 +243,22 @@ const Index = () => {
       default:
         return (
           <div className="space-y-12">
-            <div className="text-center space-y-6">
-              <div className="text-[120px] leading-none font-black tracking-tighter mb-4" style={{ fontFamily: 'Montserrat, sans-serif' }}>
-                БА<span className="inline-block">З</span>А
+            <div className="text-center space-y-6 py-20">
+              <div className="relative inline-block">
+                <svg viewBox="0 0 600 200" className="w-full max-w-2xl mx-auto" xmlns="http://www.w3.org/2000/svg">
+                  <text x="50%" y="50%" dominantBaseline="middle" textAnchor="middle" fill="white" fontSize="140" fontWeight="900" letterSpacing="-5" fontFamily="Montserrat, sans-serif">
+                    <tspan>Б</tspan>
+                    <tspan dx="-10">А</tspan>
+                    <tspan dx="-5">З</tspan>
+                    <tspan dx="-10">А</tspan>
+                  </text>
+                  <line x1="130" y1="85" x2="195" y2="85" stroke="white" strokeWidth="18" strokeLinecap="round"/>
+                  <line x1="405" y1="85" x2="470" y2="85" stroke="white" strokeWidth="18" strokeLinecap="round"/>
+                  <line x1="130" y1="130" x2="195" y2="130" stroke="white" strokeWidth="18" strokeLinecap="round"/>
+                  <line x1="405" y1="130" x2="470" y2="130" stroke="white" strokeWidth="18" strokeLinecap="round"/>
+                </svg>
               </div>
-              <p className="text-2xl tracking-[0.3em] font-light">ЦЕНТР КРЕАТИВНЫХ ИНДУСТРИЙ</p>
+              <p className="text-xl md:text-2xl tracking-[0.25em] font-light mt-8">ЦЕНТР КРЕАТИВНЫХ ИНДУСТРИЙ</p>
             </div>
 
             <div className="grid md:grid-cols-3 gap-6 mt-16">

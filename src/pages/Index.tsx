@@ -274,9 +274,9 @@ const Index = () => {
       default:
         return (
           <div className="space-y-12">
-            <div className="relative w-full">
+            <div className="relative w-full max-w-5xl mx-auto py-12">
               <img 
-                src="https://cdn.poehali.dev/projects/3f3d9455-fca0-4e12-951d-4faa125851e6/bucket/be6ba843-9763-4d7a-bd72-83a1034f6ca4.jpg" 
+                src="https://cdn.poehali.dev/projects/3f3d9455-fca0-4e12-951d-4faa125851e6/bucket/77f2038a-8901-4074-b16b-507c855a5a37.png" 
                 alt="БАЗА - Центр креативных индустрий"
                 className="w-full h-auto"
               />

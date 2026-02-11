@@ -13,24 +13,29 @@ const Index = () => {
   const [selectedEvent, setSelectedEvent] = useState<{ id: number; title: string; date: string; time: string; category: string; spots: number } | null>(null);
 
   const events = [
-    { id: 1, title: 'Воркшоп по дизайн-мышлению', date: '15 февраля', time: '19:00', category: 'Образование', spots: 12 },
-    { id: 2, title: 'Нетворкинг для стартапов', date: '18 февраля', time: '18:00', category: 'Нетворкинг', spots: 25 },
-    { id: 3, title: 'Выставка современного искусства', date: '20 февраля', time: '12:00', category: 'Культура', spots: 50 },
-    { id: 4, title: 'Мастер-класс по анимации', date: '22 февраля', time: '17:00', category: 'Мастер-класс', spots: 15 },
+    { id: 1, title: 'Воркшоп по графическому дизайну', date: '14 февраля', time: '18:00', category: 'Дизайн', spots: 20 },
+    { id: 2, title: 'Мастер-класс по созданию подкастов', date: '16 февраля', time: '17:00', category: 'Медиа', spots: 15 },
+    { id: 3, title: 'Нетворкинг для креативных предпринимателей', date: '18 февраля', time: '19:00', category: 'Нетворкинг', spots: 30 },
+    { id: 4, title: 'Лекция: Digital-маркетинг для творческих проектов', date: '20 февраля', time: '18:30', category: 'Образование', spots: 25 },
+    { id: 5, title: 'Выставка современного искусства Татарстана', date: '22 февраля', time: '15:00', category: 'Выставка', spots: 50 },
+    { id: 6, title: 'Pitch-сессия для стартапов', date: '25 февраля', time: '19:00', category: 'Бизнес', spots: 40 },
   ];
 
   const residents = [
-    { name: 'Студия Архитектуры "Пространство"', field: 'Архитектура', year: 2023 },
-    { name: 'Creative Lab', field: 'Дизайн', year: 2024 },
-    { name: 'Tech Innovators', field: 'IT', year: 2024 },
-    { name: 'Art Collective', field: 'Искусство', year: 2023 },
+    { name: 'Дизайн-студия "Графика"', field: 'Графический дизайн', year: 2023 },
+    { name: 'Медиа-агентство "Контент Pro"', field: 'Контент-продакшн', year: 2023 },
+    { name: 'IT-команда "Code Creators"', field: 'Разработка', year: 2024 },
+    { name: 'Творческое объединение "Арт-Площадка"', field: 'Современное искусство', year: 2024 },
+    { name: 'Студия анимации "Motion Lab"', field: 'Анимация', year: 2024 },
+    { name: 'Образовательный проект "Креатив Школа"', field: 'Образование', year: 2023 },
   ];
 
   const spaces = [
-    { name: 'Коворкинг', capacity: '50 мест', features: ['Wi-Fi', 'Кофе-зона', 'Переговорные'] },
-    { name: 'Конференц-зал', capacity: '100 человек', features: ['Проектор', 'Звук', 'Сцена'] },
-    { name: 'Творческая мастерская', capacity: '20 мест', features: ['Инструменты', 'Материалы', 'Хранение'] },
-    { name: 'Студия звукозаписи', capacity: '5 человек', features: ['Оборудование', 'Звукоизоляция'] },
+    { name: 'Коворкинг-зона', capacity: '60 рабочих мест', features: ['Высокоскоростной Wi-Fi', 'Кофе-пространство', 'Переговорные комнаты', 'Зона отдыха'] },
+    { name: 'Конференц-зал', capacity: 'до 150 человек', features: ['Проектор и экран', 'Звуковое оборудование', 'Сцена', 'Световое оборудование'] },
+    { name: 'Медиа-студия', capacity: '10 человек', features: ['Звукозаписывающее оборудование', 'Видеомонтажные станции', 'Зеленый фон', 'Камеры'] },
+    { name: 'Творческая мастерская', capacity: '25 мест', features: ['Мольберты', 'Инструменты', 'Материалы для творчества', 'Выставочное пространство'] },
+    { name: 'IT-лаборатория', capacity: '20 рабочих станций', features: ['Мощные компьютеры', 'Лицензионное ПО', 'VR-оборудование', '3D-принтер'] },
   ];
 
   const renderContent = () => {
@@ -181,24 +186,39 @@ const Index = () => {
                 <div className="flex items-start gap-4">
                   <Icon name="MapPin" size={24} className="mt-1 text-accent" />
                   <div>
-                    <h3 className="font-semibold mb-1">Адрес</h3>
-                    <p className="text-muted-foreground">г. Москва, ул. Креативная, д. 1</p>
+                    <h3 className="font-semibold mb-1 text-accent">Адрес</h3>
+                    <p className="text-foreground font-medium">423570, Республика Татарстан</p>
+                    <p className="text-foreground">г. Нижнекамск, ул. Лесная, д. 53</p>
                   </div>
                 </div>
                 <Separator className="bg-accent/20" />
                 <div className="flex items-start gap-4">
                   <Icon name="Phone" size={24} className="mt-1 text-accent" />
                   <div>
-                    <h3 className="font-semibold mb-1">Телефон</h3>
-                    <p className="text-muted-foreground">+7 (495) 123-45-67</p>
+                    <h3 className="font-semibold mb-1 text-accent">Телефон</h3>
+                    <p className="text-foreground">+7 (8555) 45-67-89</p>
+                    <p className="text-muted-foreground text-sm">Пн-Пт: 9:00 - 21:00, Сб-Вс: 10:00 - 18:00</p>
                   </div>
                 </div>
                 <Separator className="bg-accent/20" />
                 <div className="flex items-start gap-4">
                   <Icon name="Mail" size={24} className="mt-1 text-accent" />
                   <div>
-                    <h3 className="font-semibold mb-1">Email</h3>
-                    <p className="text-muted-foreground">info@baza.ru</p>
+                    <h3 className="font-semibold mb-1 text-accent">Email</h3>
+                    <p className="text-foreground">info@nk-baza.ru</p>
+                  </div>
+                </div>
+                <Separator className="bg-accent/20" />
+                <div className="flex items-start gap-4">
+                  <Icon name="Globe" size={24} className="mt-1 text-accent" />
+                  <div>
+                    <h3 className="font-semibold mb-1 text-accent">Социальные сети</h3>
+                    <div className="flex gap-3 mt-2">
+                      <a href="#" className="text-accent hover:text-accent/80 transition-colors">ВКонтакте</a>
+                      <a href="#" className="text-accent hover:text-accent/80 transition-colors">Telegram</a>
+                      <a href="#" className="text-accent hover:text-accent/80 transition-colors">Instagram*</a>
+                    </div>
+                    <p className="text-xs text-muted-foreground mt-2">*Meta признана экстремистской организацией в РФ</p>
                   </div>
                 </div>
               </CardContent>
@@ -213,26 +233,37 @@ const Index = () => {
             <Card className="bg-card/50 backdrop-blur border-accent/20 max-w-3xl">
               <CardContent className="pt-6 space-y-4">
                 <p className="text-lg leading-relaxed">
-                  <strong>БАЗА</strong> — это пространство для креативных индустрий, где встречаются 
-                  талантливые люди, рождаются идеи и реализуются проекты.
+                  <strong className="text-accent">МАУ «Центр креативных индустрий «База»</strong> — современное пространство 
+                  для развития творческих проектов и креативного предпринимательства в Нижнекамске.
                 </p>
                 <p className="text-muted-foreground leading-relaxed">
-                  Мы создали экосистему, которая объединяет дизайнеров, архитекторов, художников, 
-                  программистов и предпринимателей. Здесь вы найдёте пространства для работы, 
-                  образовательные программы, возможности для нетворкинга и вдохновение для новых проектов.
+                  Мы объединяем талантливых людей из разных сфер: дизайнеров, художников, медиа-специалистов, 
+                  IT-разработчиков и креативных предпринимателей. База — это не просто коворкинг, это целая 
+                  экосистема для развития креативных индустрий в Татарстане.
                 </p>
+                <p className="text-muted-foreground leading-relaxed">
+                  Здесь вы найдёте всё необходимое: современные рабочие пространства, медиа-студию, 
+                  IT-лабораторию, творческую мастерскую и конференц-зал. Мы проводим образовательные программы, 
+                  воркшопы, выставки и нетворкинг-мероприятия.
+                </p>
+                <div className="mt-8 p-6 bg-accent/10 border border-accent/20 rounded-lg">
+                  <h3 className="text-xl font-bold text-accent mb-4">#НКБольшеЧемГород #АйдаНаБазу</h3>
+                  <p className="text-muted-foreground">
+                    Присоединяйтесь к сообществу креативных людей Нижнекамска!
+                  </p>
+                </div>
                 <div className="grid sm:grid-cols-3 gap-4 mt-8">
                   <div className="text-center">
-                    <div className="text-3xl font-black text-accent mb-2">50+</div>
+                    <div className="text-3xl font-black text-accent mb-2">60+</div>
                     <div className="text-sm text-muted-foreground">Резидентов</div>
                   </div>
                   <div className="text-center">
-                    <div className="text-3xl font-black text-accent mb-2">120+</div>
+                    <div className="text-3xl font-black text-accent mb-2">200+</div>
                     <div className="text-sm text-muted-foreground">Мероприятий в год</div>
                   </div>
                   <div className="text-center">
-                    <div className="text-3xl font-black text-accent mb-2">4</div>
-                    <div className="text-sm text-muted-foreground">Пространства</div>
+                    <div className="text-3xl font-black text-accent mb-2">5</div>
+                    <div className="text-sm text-muted-foreground">Пространств</div>
                   </div>
                 </div>
               </CardContent>

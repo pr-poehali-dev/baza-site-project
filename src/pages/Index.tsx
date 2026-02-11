@@ -22,12 +22,22 @@ const Index = () => {
   ];
 
   const residents = [
-    { name: 'Дизайн-студия "Графика"', field: 'Графический дизайн', year: 2023 },
-    { name: 'Медиа-агентство "Контент Pro"', field: 'Контент-продакшн', year: 2023 },
-    { name: 'IT-команда "Code Creators"', field: 'Разработка', year: 2024 },
-    { name: 'Творческое объединение "Арт-Площадка"', field: 'Современное искусство', year: 2024 },
-    { name: 'Студия анимации "Motion Lab"', field: 'Анимация', year: 2024 },
-    { name: 'Образовательный проект "Креатив Школа"', field: 'Образование', year: 2023 },
+    { name: 'Мастерская «MARO»', field: 'Творческая мастерская', year: 2023 },
+    { name: 'Кулинарная студия «Молоко»', field: 'Кулинария', year: 2023 },
+    { name: 'Школа семейного образования «Матрешка»', field: 'Образование', year: 2023 },
+    { name: 'Семейная мастерская «Бэйбика»', field: 'Творчество для семей', year: 2023 },
+    { name: 'Художественная студия «Indi Art»', field: 'Изобразительное искусство', year: 2023 },
+    { name: 'Студия керамики «VAZA»', field: 'Керамика', year: 2023 },
+    { name: 'Танцевальная студия «BeU»', field: 'Танцы', year: 2023 },
+    { name: 'Фотостудия «Вселенная»', field: 'Фотография', year: 2023 },
+    { name: 'Студия английского языка', field: 'Иностранные языки', year: 2024 },
+    { name: 'Вокальная студия «Про Голос»', field: 'Вокал', year: 2024 },
+    { name: 'Школа барменов', field: 'Барменское дело', year: 2024 },
+    { name: 'Детский развивающий центр «Шарли»', field: 'Детское развитие', year: 2024 },
+    { name: '«Локация» ПАО НКНХ', field: 'Корпоративное пространство', year: 2023 },
+    { name: 'Фотостудия «Рядом»', field: 'Фотография', year: 2024 },
+    { name: '«МузЦех»', field: 'Музыка', year: 2024 },
+    { name: 'Школа креативных индустрий г. Нижнекамска', field: 'Образование', year: 2023 },
   ];
 
   const spaces = [
@@ -254,7 +264,7 @@ const Index = () => {
                 </div>
                 <div className="grid sm:grid-cols-3 gap-4 mt-8">
                   <div className="text-center">
-                    <div className="text-3xl font-black text-accent mb-2">60+</div>
+                    <div className="text-3xl font-black text-accent mb-2">16</div>
                     <div className="text-sm text-muted-foreground">Резидентов</div>
                   </div>
                   <div className="text-center">

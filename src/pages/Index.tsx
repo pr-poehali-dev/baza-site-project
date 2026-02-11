@@ -243,14 +243,12 @@ const Index = () => {
       default:
         return (
           <div className="space-y-12">
-            <div className="text-center space-y-6 py-20">
-              <div className="flex flex-col items-center gap-8">
-                <img 
-                  src="https://cdn.poehali.dev/projects/3f3d9455-fca0-4e12-951d-4faa125851e6/bucket/220752ea-19b3-4184-a6f6-8baa0fb93907.png" 
-                  alt="БАЗА"
-                  className="w-full max-w-3xl"
-                />
-              </div>
+            <div className="relative w-full">
+              <img 
+                src="https://cdn.poehali.dev/projects/3f3d9455-fca0-4e12-951d-4faa125851e6/bucket/be6ba843-9763-4d7a-bd72-83a1034f6ca4.jpg" 
+                alt="БАЗА - Центр креативных индустрий"
+                className="w-full h-auto"
+              />
             </div>
 
             <div className="grid md:grid-cols-3 gap-6 mt-16">

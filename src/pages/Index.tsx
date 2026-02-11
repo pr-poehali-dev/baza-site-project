@@ -38,10 +38,10 @@ const Index = () => {
       case 'residents':
         return (
           <div className="space-y-6">
-            <h2 className="text-4xl font-bold mb-8">Резиденты</h2>
+            <h2 className="text-4xl font-black mb-8 text-accent">Резиденты</h2>
             <div className="grid md:grid-cols-2 gap-6">
               {residents.map((resident, index) => (
-                <Card key={index} className="bg-card/80 backdrop-blur border-white/20 hover-scale">
+                <Card key={index} className="bg-card/50 backdrop-blur border-accent/20 hover:border-accent/50 transition-all hover-scale">
                   <CardHeader>
                     <CardTitle className="text-xl">{resident.name}</CardTitle>
                     <CardDescription className="text-muted-foreground">
@@ -58,17 +58,17 @@ const Index = () => {
         return (
           <div className="space-y-6">
             <div className="flex items-center justify-between mb-8">
-              <h2 className="text-4xl font-bold">Мероприятия</h2>
+              <h2 className="text-4xl font-black text-accent">Мероприятия</h2>
               <Calendar
                 mode="single"
                 selected={date}
                 onSelect={setDate}
-                className="rounded-md border border-white/20 bg-card/80 backdrop-blur p-3"
+                className="rounded-md border border-accent/20 bg-card/50 backdrop-blur p-3"
               />
             </div>
             <div className="grid md:grid-cols-2 gap-6">
               {events.map((event) => (
-                <Card key={event.id} className="bg-card/80 backdrop-blur border-white/20 hover-scale">
+                <Card key={event.id} className="bg-card/50 backdrop-blur border-accent/20 hover:border-accent/50 transition-all hover-scale">
                   <CardHeader>
                     <div className="flex items-start justify-between">
                       <div>
@@ -92,7 +92,7 @@ const Index = () => {
                             Зарегистрироваться
                           </Button>
                         </DialogTrigger>
-                        <DialogContent className="bg-card border-white/20">
+                        <DialogContent className="bg-card border-accent/20">
                           <DialogHeader>
                             <DialogTitle>Регистрация на мероприятие</DialogTitle>
                             <DialogDescription>
@@ -120,10 +120,10 @@ const Index = () => {
       case 'spaces':
         return (
           <div className="space-y-6">
-            <h2 className="text-4xl font-bold mb-8">Пространства</h2>
+            <h2 className="text-4xl font-black mb-8 text-accent">Пространства</h2>
             <div className="grid md:grid-cols-2 gap-6">
               {spaces.map((space, index) => (
-                <Card key={index} className="bg-card/80 backdrop-blur border-white/20 hover-scale">
+                <Card key={index} className="bg-card/50 backdrop-blur border-accent/20 hover:border-accent/50 transition-all hover-scale">
                   <CardHeader>
                     <CardTitle className="text-xl">{space.name}</CardTitle>
                     <CardDescription className="text-muted-foreground">
@@ -146,8 +146,8 @@ const Index = () => {
       case 'booking':
         return (
           <div className="space-y-6">
-            <h2 className="text-4xl font-bold mb-8">Бронирование</h2>
-            <Card className="bg-card/80 backdrop-blur border-white/20 max-w-2xl">
+            <h2 className="text-4xl font-black mb-8 text-accent">Бронирование</h2>
+            <Card className="bg-card/50 backdrop-blur border-accent/20 max-w-2xl">
               <CardHeader>
                 <CardTitle>Забронировать пространство</CardTitle>
                 <CardDescription>
@@ -159,7 +159,7 @@ const Index = () => {
                   mode="single"
                   selected={date}
                   onSelect={setDate}
-                  className="rounded-md border border-white/20 bg-background/50 mx-auto"
+                  className="rounded-md border border-accent/20 bg-background/50 mx-auto"
                 />
                 <Button className="w-full" size="lg">
                   Отправить заявку
@@ -175,8 +175,8 @@ const Index = () => {
       case 'contacts':
         return (
           <div className="space-y-6">
-            <h2 className="text-4xl font-bold mb-8">Контакты</h2>
-            <Card className="bg-card/80 backdrop-blur border-white/20 max-w-2xl">
+            <h2 className="text-4xl font-black mb-8 text-accent">Контакты</h2>
+            <Card className="bg-card/50 backdrop-blur border-accent/20 max-w-2xl">
               <CardContent className="pt-6 space-y-4">
                 <div className="flex items-start gap-4">
                   <Icon name="MapPin" size={24} className="mt-1 text-accent" />
@@ -185,7 +185,7 @@ const Index = () => {
                     <p className="text-muted-foreground">г. Москва, ул. Креативная, д. 1</p>
                   </div>
                 </div>
-                <Separator className="bg-white/20" />
+                <Separator className="bg-accent/20" />
                 <div className="flex items-start gap-4">
                   <Icon name="Phone" size={24} className="mt-1 text-accent" />
                   <div>
@@ -193,7 +193,7 @@ const Index = () => {
                     <p className="text-muted-foreground">+7 (495) 123-45-67</p>
                   </div>
                 </div>
-                <Separator className="bg-white/20" />
+                <Separator className="bg-accent/20" />
                 <div className="flex items-start gap-4">
                   <Icon name="Mail" size={24} className="mt-1 text-accent" />
                   <div>
@@ -209,8 +209,8 @@ const Index = () => {
       case 'about':
         return (
           <div className="space-y-6">
-            <h2 className="text-4xl font-bold mb-8">О центре</h2>
-            <Card className="bg-card/80 backdrop-blur border-white/20 max-w-3xl">
+            <h2 className="text-4xl font-black mb-8 text-accent">О центре</h2>
+            <Card className="bg-card/50 backdrop-blur border-accent/20 max-w-3xl">
               <CardContent className="pt-6 space-y-4">
                 <p className="text-lg leading-relaxed">
                   <strong>БАЗА</strong> — это пространство для креативных индустрий, где встречаются 
@@ -223,15 +223,15 @@ const Index = () => {
                 </p>
                 <div className="grid sm:grid-cols-3 gap-4 mt-8">
                   <div className="text-center">
-                    <div className="text-3xl font-bold mb-2">50+</div>
+                    <div className="text-3xl font-black text-accent mb-2">50+</div>
                     <div className="text-sm text-muted-foreground">Резидентов</div>
                   </div>
                   <div className="text-center">
-                    <div className="text-3xl font-bold mb-2">120+</div>
+                    <div className="text-3xl font-black text-accent mb-2">120+</div>
                     <div className="text-sm text-muted-foreground">Мероприятий в год</div>
                   </div>
                   <div className="text-center">
-                    <div className="text-3xl font-bold mb-2">4</div>
+                    <div className="text-3xl font-black text-accent mb-2">4</div>
                     <div className="text-sm text-muted-foreground">Пространства</div>
                   </div>
                 </div>
@@ -252,30 +252,30 @@ const Index = () => {
             </div>
 
             <div className="grid md:grid-cols-3 gap-6 mt-16">
-              <Card className="bg-card/80 backdrop-blur border-white/20 hover-scale cursor-pointer" onClick={() => setActiveSection('events')}>
+              <Card className="bg-card/50 backdrop-blur border-accent/20 hover:border-accent/50 transition-all hover-scale cursor-pointer" onClick={() => setActiveSection('events')}>
                 <CardHeader>
                   <Icon name="Calendar" size={32} className="mb-4 text-accent" />
-                  <CardTitle>Мероприятия</CardTitle>
+                  <CardTitle className="text-accent">Мероприятия</CardTitle>
                   <CardDescription className="text-muted-foreground">
                     Воркшопы, выставки и нетворкинг
                   </CardDescription>
                 </CardHeader>
               </Card>
 
-              <Card className="bg-card/80 backdrop-blur border-white/20 hover-scale cursor-pointer" onClick={() => setActiveSection('spaces')}>
+              <Card className="bg-card/50 backdrop-blur border-accent/20 hover:border-accent/50 transition-all hover-scale cursor-pointer" onClick={() => setActiveSection('spaces')}>
                 <CardHeader>
                   <Icon name="Building2" size={32} className="mb-4 text-accent" />
-                  <CardTitle>Пространства</CardTitle>
+                  <CardTitle className="text-accent">Пространства</CardTitle>
                   <CardDescription className="text-muted-foreground">
                     Коворкинг, студии и залы
                   </CardDescription>
                 </CardHeader>
               </Card>
 
-              <Card className="bg-card/80 backdrop-blur border-white/20 hover-scale cursor-pointer" onClick={() => setActiveSection('residents')}>
+              <Card className="bg-card/50 backdrop-blur border-accent/20 hover:border-accent/50 transition-all hover-scale cursor-pointer" onClick={() => setActiveSection('residents')}>
                 <CardHeader>
                   <Icon name="Users" size={32} className="mb-4 text-accent" />
-                  <CardTitle>Резиденты</CardTitle>
+                  <CardTitle className="text-accent">Резиденты</CardTitle>
                   <CardDescription className="text-muted-foreground">
                     Креативные команды и проекты
                   </CardDescription>
@@ -288,13 +288,13 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen concrete-texture">
-      <nav className="border-b border-white/20 bg-background/50 backdrop-blur-sm sticky top-0 z-50">
+    <div className="min-h-screen urban-texture bg-background">
+      <nav className="border-b border-accent/20 bg-background/80 backdrop-blur-sm sticky top-0 z-50">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <button 
               onClick={() => setActiveSection('main')}
-              className="text-2xl font-bold tracking-tight hover:opacity-80 transition-opacity"
+              className="text-2xl font-black tracking-tight text-accent hover:text-accent/80 transition-colors"
               style={{ fontFamily: 'Montserrat, sans-serif' }}
             >
               БАЗА
@@ -312,8 +312,8 @@ const Index = () => {
                 <button
                   key={item.id}
                   onClick={() => setActiveSection(item.id)}
-                  className={`hidden md:flex items-center gap-2 hover:text-accent transition-colors ${
-                    activeSection === item.id ? 'text-accent font-semibold' : ''
+                  className={`hidden md:flex items-center gap-2 transition-colors font-medium ${
+                    activeSection === item.id ? 'text-accent font-bold' : 'text-muted-foreground hover:text-accent'
                   }`}
                 >
                   <Icon name={item.icon} size={18} />

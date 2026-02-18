@@ -10,16 +10,91 @@ import Icon from '@/components/ui/icon';
 const Index = () => {
   const [activeSection, setActiveSection] = useState('main');
   const [date, setDate] = useState<Date | undefined>(new Date());
-  const [selectedEvent, setSelectedEvent] = useState<{ id: number; title: string; date: string; time: string; category: string; spots: number } | null>(null);
-
   const events = [
-    { id: 1, title: 'Воркшоп по графическому дизайну', date: '14 февраля', time: '18:00', category: 'Дизайн', spots: 20 },
-    { id: 2, title: 'Мастер-класс по созданию подкастов', date: '16 февраля', time: '17:00', category: 'Медиа', spots: 15 },
-    { id: 3, title: 'Нетворкинг для креативных предпринимателей', date: '18 февраля', time: '19:00', category: 'Нетворкинг', spots: 30 },
-    { id: 4, title: 'Лекция: Digital-маркетинг для творческих проектов', date: '20 февраля', time: '18:30', category: 'Образование', spots: 25 },
-    { id: 5, title: 'Выставка современного искусства Татарстана', date: '22 февраля', time: '15:00', category: 'Выставка', spots: 50 },
-    { id: 6, title: 'Pitch-сессия для стартапов', date: '25 февраля', time: '19:00', category: 'Бизнес', spots: 40 },
+    {
+      id: 1,
+      title: 'Мудрость материнства',
+      date: '19 февраля',
+      time: '18:00',
+      category: 'Семья',
+      description: 'Тёплая и поддерживающая встреча для мам — про материнство, заботу о себе и важные переходы, которые мы проживаем вместе с детьми.',
+      image: 'https://cdn.poehali.dev/projects/3f3d9455-fca0-4e12-951d-4faa125851e6/bucket/8a12d5c4-c5ab-4c8f-9696-e9c53357608b.jpg',
+      location: 'Лесная, 55',
+      price: 'Бесплатно',
+      status: 'upcoming' as const,
+      contact: '+79272463896',
+    },
+    {
+      id: 2,
+      title: 'Мастер-класс по керамике',
+      date: '22 февраля',
+      time: '14:00',
+      category: 'Творчество',
+      description: 'Создайте свою первую керамическую работу под руководством мастеров студии «VAZA». Все материалы включены.',
+      image: 'https://cdn.poehali.dev/projects/3f3d9455-fca0-4e12-951d-4faa125851e6/files/a4fbed42-9685-40fd-83a1-7c172c26d110.jpg',
+      location: 'Лесная, 53',
+      price: 'Бесплатно',
+      status: 'upcoming' as const,
+      contact: '+79272463896',
+    },
+    {
+      id: 3,
+      title: 'Выставка «Город внутри»',
+      date: '1 марта',
+      time: '12:00',
+      category: 'Выставка',
+      description: 'Выставка работ резидентов Базы — живопись, графика, фотография и инсталляции о жизни в Нижнекамске.',
+      image: 'https://cdn.poehali.dev/projects/3f3d9455-fca0-4e12-951d-4faa125851e6/files/28cccb68-cd50-4726-99b0-3b7f65e9e1c5.jpg',
+      location: 'Лесная, 53',
+      price: 'Бесплатно',
+      status: 'upcoming' as const,
+      contact: '+79272463896',
+    },
+    {
+      id: 4,
+      title: 'Детская творческая лаборатория',
+      date: '8 марта',
+      time: '11:00',
+      category: 'Дети',
+      description: 'Праздничный мастер-класс для детей 5-12 лет: рисование, лепка, создание открыток к 8 Марта.',
+      image: 'https://cdn.poehali.dev/projects/3f3d9455-fca0-4e12-951d-4faa125851e6/files/67b02a17-0cef-457b-a164-f300e735c149.jpg',
+      location: 'Лесная, 53',
+      price: 'Бесплатно',
+      status: 'upcoming' as const,
+      contact: '+79272463896',
+    },
+    {
+      id: 5,
+      title: 'Нетворкинг «Креативный завтрак»',
+      date: '9 февраля',
+      time: '10:00',
+      category: 'Нетворкинг',
+      description: 'Утренняя встреча для предпринимателей и креативных специалистов. Знакомства, обмен опытом и свежие идеи за чашкой кофе.',
+      image: 'https://cdn.poehali.dev/projects/3f3d9455-fca0-4e12-951d-4faa125851e6/files/8d8b5715-9dbc-483c-9f6c-70b49795e0d2.jpg',
+      location: 'Лесная, 53',
+      price: 'Бесплатно',
+      status: 'past' as const,
+      contact: '+79272463896',
+    },
+    {
+      id: 6,
+      title: 'Концерт «МузЦех Live»',
+      date: '2 февраля',
+      time: '19:00',
+      category: 'Музыка',
+      description: 'Живой концерт резидентов МузЦеха — авторская музыка, джем-сейшн и тёплая атмосфера.',
+      image: 'https://cdn.poehali.dev/projects/3f3d9455-fca0-4e12-951d-4faa125851e6/files/a102abf8-08fb-4bd7-9524-33614d956fde.jpg',
+      location: 'Лесная, 53',
+      price: 'Бесплатно',
+      status: 'past' as const,
+      contact: '+79272463896',
+    },
   ];
+
+  const [selectedEvent, setSelectedEvent] = useState<typeof events[0] | null>(null);
+  const [eventsFilter, setEventsFilter] = useState<'all' | 'upcoming' | 'past'>('all');
+
+  const filteredEvents = eventsFilter === 'all' ? events : events.filter(e => e.status === eventsFilter);
 
   const residents = [
     { name: 'Мастерская «MARO»', field: 'Творческая мастерская', year: 2023 },
@@ -72,63 +147,113 @@ const Index = () => {
       case 'events':
         return (
           <div className="space-y-6">
-            <div className="flex items-center justify-between mb-8">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8">
               <h2 className="text-4xl font-black text-accent">Мероприятия</h2>
-              <Calendar
-                mode="single"
-                selected={date}
-                onSelect={setDate}
-                className="rounded-md border border-accent/20 bg-card/50 backdrop-blur p-3"
-              />
+              <div className="flex gap-2">
+                <Button
+                  variant={eventsFilter === 'all' ? 'default' : 'outline'}
+                  size="sm"
+                  onClick={() => setEventsFilter('all')}
+                >
+                  Все
+                </Button>
+                <Button
+                  variant={eventsFilter === 'upcoming' ? 'default' : 'outline'}
+                  size="sm"
+                  onClick={() => setEventsFilter('upcoming')}
+                >
+                  Предстоящие
+                </Button>
+                <Button
+                  variant={eventsFilter === 'past' ? 'default' : 'outline'}
+                  size="sm"
+                  onClick={() => setEventsFilter('past')}
+                >
+                  Прошедшие
+                </Button>
+              </div>
             </div>
             <div className="grid md:grid-cols-2 gap-6">
-              {events.map((event) => (
-                <Card key={event.id} className="bg-card/50 backdrop-blur border-accent/20 hover:border-accent/50 transition-all hover-scale">
-                  <CardHeader>
-                    <div className="flex items-start justify-between">
-                      <div>
-                        <CardTitle className="text-xl mb-2">{event.title}</CardTitle>
-                        <CardDescription className="text-muted-foreground">
-                          <Icon name="Calendar" size={16} className="inline mr-2" />
-                          {event.date} • {event.time}
-                        </CardDescription>
-                      </div>
+              {filteredEvents.map((event) => (
+                <Card key={event.id} className="bg-card/50 backdrop-blur border-accent/20 hover:border-accent/50 transition-all hover-scale overflow-hidden">
+                  <div className="relative">
+                    <img
+                      src={event.image}
+                      alt={event.title}
+                      className="w-full h-48 object-cover"
+                    />
+                    <div className="absolute top-3 left-3 flex gap-2">
                       <Badge variant="secondary">{event.category}</Badge>
+                      {event.status === 'past' && (
+                        <Badge variant="outline" className="bg-background/80 backdrop-blur">Прошло</Badge>
+                      )}
                     </div>
+                    <div className="absolute top-3 right-3">
+                      <Badge className="bg-accent text-accent-foreground">{event.price}</Badge>
+                    </div>
+                  </div>
+                  <CardHeader className="pb-2">
+                    <CardTitle className="text-xl">{event.title}</CardTitle>
+                    <CardDescription className="text-muted-foreground flex items-center gap-4 flex-wrap">
+                      <span className="flex items-center gap-1">
+                        <Icon name="Calendar" size={14} />
+                        {event.date} • {event.time}
+                      </span>
+                      <span className="flex items-center gap-1">
+                        <Icon name="MapPin" size={14} />
+                        {event.location}
+                      </span>
+                    </CardDescription>
                   </CardHeader>
                   <CardContent>
+                    <p className="text-sm text-muted-foreground mb-4 leading-relaxed">
+                      {event.description}
+                    </p>
                     <div className="flex items-center justify-between">
-                      <span className="text-sm text-muted-foreground">
-                        Осталось мест: {event.spots}
-                      </span>
-                      <Dialog>
-                        <DialogTrigger asChild>
-                          <Button variant="outline" onClick={() => setSelectedEvent(event)}>
-                            Зарегистрироваться
-                          </Button>
-                        </DialogTrigger>
-                        <DialogContent className="bg-card border-accent/20">
-                          <DialogHeader>
-                            <DialogTitle>Регистрация на мероприятие</DialogTitle>
-                            <DialogDescription>
-                              {selectedEvent?.title}
-                            </DialogDescription>
-                          </DialogHeader>
-                          <div className="space-y-4 py-4">
-                            <p className="text-sm text-muted-foreground">
-                              Дата: {selectedEvent?.date} в {selectedEvent?.time}
-                            </p>
-                            <p className="text-sm">
-                              Функция регистрации будет добавлена в следующей версии.
-                            </p>
-                          </div>
-                        </DialogContent>
-                      </Dialog>
+                      {event.status === 'upcoming' ? (
+                        <Dialog>
+                          <DialogTrigger asChild>
+                            <Button onClick={() => setSelectedEvent(event)}>
+                              Записаться
+                            </Button>
+                          </DialogTrigger>
+                          <DialogContent className="bg-card border-accent/20">
+                            <DialogHeader>
+                              <DialogTitle>{selectedEvent?.title}</DialogTitle>
+                              <DialogDescription>
+                                {selectedEvent?.date} в {selectedEvent?.time} • {selectedEvent?.location}
+                              </DialogDescription>
+                            </DialogHeader>
+                            <div className="space-y-4 py-4">
+                              <p className="text-sm text-muted-foreground">
+                                {selectedEvent?.description}
+                              </p>
+                              <Separator className="bg-accent/20" />
+                              <div className="space-y-2">
+                                <p className="text-sm font-medium">Для записи свяжитесь с нами:</p>
+                                <a href={`tel:${selectedEvent?.contact}`} className="flex items-center gap-2 text-accent hover:underline">
+                                  <Icon name="Phone" size={16} />
+                                  {selectedEvent?.contact}
+                                </a>
+                              </div>
+                              <p className="text-xs text-muted-foreground">Вход свободный, по предварительной записи</p>
+                            </div>
+                          </DialogContent>
+                        </Dialog>
+                      ) : (
+                        <Badge variant="outline" className="text-muted-foreground">Мероприятие завершено</Badge>
+                      )}
                     </div>
                   </CardContent>
                 </Card>
               ))}
             </div>
+            {filteredEvents.length === 0 && (
+              <div className="text-center py-12 text-muted-foreground">
+                <Icon name="Calendar" size={48} className="mx-auto mb-4 opacity-50" />
+                <p>Нет мероприятий в этой категории</p>
+              </div>
+            )}
           </div>
         );
 

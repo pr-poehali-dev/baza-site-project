@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
@@ -7,130 +7,37 @@ import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import Icon from '@/components/ui/icon';
 
+interface ApiEvent {
+  id: number;
+  title: string;
+  date_text: string;
+  time_text: string;
+  category: string;
+  description: string;
+  image: string;
+  location: string;
+  price: string;
+  status: 'upcoming' | 'past';
+  contact: string;
+}
+
+const EVENTS_API = 'https://functions.poehali.dev/69176b78-d673-4802-b7ae-5739d7147e4c';
+
 const Index = () => {
   const [activeSection, setActiveSection] = useState('main');
   const [date, setDate] = useState<Date | undefined>(new Date());
-  const events = [
-    {
-      id: 1,
-      title: 'Мастер-класс «Пуговки-цветочки»',
-      date: '1 марта',
-      time: '',
-      category: 'Творчество',
-      description: 'Создаём цветочные композиции из пластиковых пуговиц и превращаем переработанный материал в стильный декор. Идеальный подарок к 8 Марта — красивый и осознанный.',
-      image: 'https://cdn4.telesco.pe/file/oF-hkydNqAdzGzGrwO5sATYlNS4jYvlKmHus_TuhNsmPD7J6XRmBBFqVNihZIPTorUXiHhqtmZCyZ74JDzn9TCXIQF_84LTRSEuMxhkmpxaYOFztYxpzzopi5pCcs0o38TuFmYwVOPb-aLe9MSIC_rVVrxwDRfkB9BjdJlJ37QlG8Jl2jaFCbM-GS7HfxRniMYOGqFvcB_Fp5KXlopNIfyKFkhjplsbcvIcT-qlz4cxeOqhk9MJwpxYxY3628U_MtvCS1LS4i6hZe27m2IF5p-HvPgif5B08vYuoPsjQ8Uvykbbkr7hwLmtJtVQ-YYvc8HiwJmE11SsPOsANy2BA1A.jpg',
-      location: 'Лесная, 55',
-      price: 'Бесплатно',
-      status: 'upcoming' as const,
-      contact: '+79503171377',
-    },
-    {
-      id: 2,
-      title: 'Ночник «Луна» — интерьерный мастер-класс',
-      date: 'Скоро',
-      time: '',
-      category: 'Творчество',
-      description: 'Создаём интерьерный ночник в форме Луны с фактурой и объёмом. Время для замедления и ручного творчества — уходишь домой с готовой работой.',
-      image: 'https://cdn4.telesco.pe/file/g3Jrom89AUbLnF4WEkA130j7qXvHhZ77bPoImx4mH6Q2194LiOP1rzNmcvF2wmUuxUKE4Tpk-Mhi5aUcCqdweZeFqfINPW3MAwISE-bTW3zjUZy-pGoy-pP2ETImUqq2tSESGigDLaA22Evx_PNbUBVanWMKe4-j1sIEOve3LqNSqVq1u5aUC100JyVa02mA1AXo1jrTbnNnzPvrMth-j3fcjvOgoGaPtBglPcY0iNxopN9tVM0I-VnpaTdDsey7BXTFz0Xc4WOX7DcCRJMqdBjlTMTppHP2hRbT9mdG5VZBsIJ_ZmmYx6JFrk7g3GYxBKPnAr9jDpH5u7zH404LQg.jpg',
-      location: 'Лесная, 53',
-      price: '2500 ₽',
-      status: 'upcoming' as const,
-      contact: '+79503171377',
-    },
-    {
-      id: 3,
-      title: 'Мастер-класс по фьюзингу стекла — Art Фьюжн',
-      date: 'Скоро',
-      time: '1.5–2 часа',
-      category: 'Творчество',
-      description: 'Знакомство с техникой фьюзинга — обжиг стекла при 700–850°С. Создаёшь стеклянную открытку, мозаику или украшение своими руками.',
-      image: 'https://cdn4.telesco.pe/file/V8f_htiGn8HctgiYw1o6zB3IGHQ3RYPxtCVAuyewsk1TLFfRjbPWNb4IMFFmOKq0nD2sNJv3C75OUctevF25MyQvHI_qbz1fWT3Hz41Ymp9nr_HI2NsxUJa98IIsMzuQX8r1Kq8truAkT0ayUlF_7m9ZrvMPBkxwxUGX5nMwcnUBJs0UvPHtIt8fEGxyfTdwX9bYBQvAfDFB7HQ0Z6DNF9kYoYNYiUXrDImaxxaWZ4O3rQmD3sBc7Rs-ETMyC7cbLd',
-      location: 'Лесная, 53',
-      price: 'По запросу',
-      status: 'upcoming' as const,
-      contact: '+79503171377',
-    },
-    {
-      id: 4,
-      title: 'Бачата-вечеринка с мастер-классом',
-      date: 'Скоро',
-      time: '',
-      category: 'Танцы',
-      description: 'Мастер-класс по базовым шагам бачаты для начинающих, а после — полноценная танцевальная вечеринка. Приходи один или с парой.',
-      image: 'https://cdn4.telesco.pe/file/BAhHPG1F5GvWLdxRo3H5ZHzsLCxPYDtHC0B_5IHzOEYpjyph1DIe6y9RksaORjbeR2eIQVXjDpcQDI3Ps_4cQQt1_HH-A27THRfeGx5pQy_8Povc-DbsKWSNVPvYfZiOh36dw_cndiBqHACAKUk5obRFNtcuds_9epgootqoZA15Juaq4QMij-eY-4SiDkM1r-Vo7_OAAfY3otZiZpTpdP8rlFlF9RkARPYCCBb_qGzJBy5dEH8u6yG0H1LrTP6rWi1Jwh4E8qsKds7Vh2SCgkiyO9M3qnUa74B9kxYxIMyTpxuYZ0QglgMSDzaokZosuFQlm7O3Q5g26_L6bksNlg.jpg',
-      location: 'Лесная, 53',
-      price: 'Бесплатно',
-      status: 'upcoming' as const,
-      contact: '+79503171377',
-    },
-    {
-      id: 5,
-      title: 'День открытых дверей Школы креативных индустрий',
-      date: 'Скоро',
-      time: '',
-      category: 'Образование',
-      description: 'Знакомство со студиями, преподавателями и атмосферой Школы. Узнай, какие направления есть и как стать студентом.',
-      image: 'https://cdn4.telesco.pe/file/YTyBs8lShwJhnmYgo3HCmu-luC86KNcC_7wCEREcgK6qXiqjSedoxZTr2QzOF2w_rCl8TgD-vg9IDBHRVCu7LkT5SJArhyju0bHpyIz0mtAQ_JsW-J0yINHLVaWfLMBK7f8AOaxtAAOIELJbZqXhzeQNPXfGjpz1XadZ-bAvJ9a__51k1l_4bfLv5TdVwPqXBmMwQoAXAgQ8v-1GOxXAXxndD43KnZUOZ4gcGJzzBfbTL9p2CR3VXvQ1rljXjc-Bkg4az_2SPlzO6uTHNdWjG4t-GcHttvYMWO_l0Jbkll4CCMW4WXzHCWQwjFXe8IN4sh7VyP2cZzt1bWnIsXcZDw.jpg',
-      location: 'Лесная, 53 (2 этаж)',
-      price: 'Бесплатно',
-      status: 'upcoming' as const,
-      contact: '+79503171377',
-    },
-    {
-      id: 6,
-      title: 'Книжный киноклуб «Обломов»',
-      date: 'Скоро',
-      time: '',
-      category: 'Культура',
-      description: 'Обсуждение романа И.А. Гончарова «Обломов» в уютной компании за чашкой чая. Погружение в литературу и обмен впечатлениями.',
-      image: 'https://cdn4.telesco.pe/file/g2Nfiz4sZ5jsbZro3qSNNX3fbAOkm_jIFVjYfJgiCtYEgXS1LkhFQnE208fGdN5XshQXpMZKnnQDtJsSotfyxwBhMJlW6u0GrJzLszVMui6Z71yx9RFrbiVRcfRf-yFiDzvVsnJGNv7AjHarBU9x_bHHeLpAd1QXKR1buOkrwRK_bvG6K1y8OFAoNyHmkoVyj12ihOmzfqx_m3hunWcKLed8GtmawuAOnxpMMtDiOBTdXLZEvxclDMlqCOHs2vptztm4K7GutCodenKmOywFgYiefLA-_PHQJ6Pc9V7ciq3vzJxlgykeKTQWoLV34JgbUKcwTPZgVLz28EfCq51cw.jpg',
-      location: 'Лесная, 53',
-      price: 'Бесплатно',
-      status: 'upcoming' as const,
-      contact: '+79503171377',
-    },
-    {
-      id: 7,
-      title: 'МК по мыловарению к 23 февраля',
-      date: '22 февраля',
-      time: '17:00–20:00',
-      category: 'Творчество',
-      description: 'Создание мыла ручной работы в подарок к 23 февраля. Уходишь с готовым и упакованным подарком, сделанным своими руками.',
-      image: 'https://cdn4.telesco.pe/file/aegXpMlrs8b7YgABtseKZ0VU6FtZbIikDOszDlgkkwisnGC-3kVOu2oeJ9R8w94s_u-dz7uyTKLP0BlCVc1NWCEkqo2qYbncQbNUqIedHoURLwqj595ga9kvFh5XMu39f_mgqyJsd5NjuxzN9mvzrRGyqBxRktG56MvLf7XZpHRBNQR4iCDZTle7YdzhnW52OgRpvnkX6aYBGqrx1KCkjF4BDd6MbOiFa_nhEHPxst-yCX9zgYMCgVOud2Y8fZ9Z4iUwwgNQsmRHT0XpJRSpopStZnzQIF6LkyD5g4anL_bLlQ9ymbsN_NXiUf8fZthG9Ci0zD6q97w9mWAwKCN-uw.jpg',
-      location: 'Лесная, 53',
-      price: 'от 350 ₽',
-      status: 'past' as const,
-      contact: '+79503171377',
-    },
-    {
-      id: 8,
-      title: 'МК по керамике «Ваза для цветов»',
-      date: 'Февраль',
-      time: '',
-      category: 'Керамика',
-      description: 'Лепим вазу для цветов и создаём стильное панно — 2 часа спокойного творчества с чаем и хорошей компанией. Все материалы включены.',
-      image: 'https://cdn4.telesco.pe/file/hF00wm9X2fnQGUAifJ6gmXhyI_qt-vOrU2jg70Fr2LeFsSboj6n3DVnXwHQN_ZtfoZ0GDHruqbg3twAsbUvZXneLSLSL3qwsFseTLxr0aqLU12sMcgZltBHOVF5oyOCBiHPbXaPMn8pwyfU7TiTu-ewsT8lMJ4U_WaPmkeejNz_7i07IQoYCOJDINQagMPzrJ2XRkE1dGodoq9xDAqH-ERvJuE73FAqjguxG7swDMcbJ5QsyUfuk07piV5jcFyf10IhEwnXRWJ6-I9rPP4ojyJQP1FknsVZdhtIHeLGThzC0nSRBAUH5yhjSepc2kvEA3tXCJGBI994LkOGIY8d',
-      location: 'Лесная, 53',
-      price: '2500 ₽',
-      status: 'past' as const,
-      contact: '+79503171377',
-    },
-    {
-      id: 9,
-      title: 'МК «Гипс и свечи»',
-      date: 'Февраль',
-      time: '11:00–14:00',
-      category: 'Творчество',
-      description: 'Расписываем подставки и создаём свечу-подсвечник. Творчество с детьми — уходите с готовым подарком.',
-      image: 'https://cdn4.telesco.pe/file/K4NZOyM_ZoEdoMq8PgZDwdo0_ajlKqdzaXUohtkXvE0oxWC0lw4qndIoPIdgkqAEGOSU1p_6rvNvpmsfSbe71DlAW9MRTlgiXqAo-1pReKjZducleZ17Sv0lPshnngWFm34ztx2JVbXckR5NJ1hMa6cfJJRIAsp1Qqbm9B-JZlg9VVmY5Fo2PzD_YmmdR-iarNBEnDYEKJm2mS4NS5o7faIj5Sqf1Yb4PwayMePZSYmZsS846XLU_1k5IVTXHt3bCk1UmphlFL8swDacbjd00gGjNmIeZJvaXiPChVNzUew-09HGBXzSpwzcgAVswNfavL1uDyH-d3FXLq_2yHq3XQ.jpg',
-      location: 'Лесная, 53',
-      price: 'от 400 ₽',
-      status: 'past' as const,
-      contact: '+79503171377',
-    },
-  ];
+  const [events, setEvents] = useState<ApiEvent[]>([]);
+  const [eventsLoading, setEventsLoading] = useState(false);
 
-  const [selectedEvent, setSelectedEvent] = useState<typeof events[0] | null>(null);
+  useEffect(() => {
+    setEventsLoading(true);
+    fetch(EVENTS_API)
+      .then(r => r.json())
+      .then(data => setEvents(data))
+      .finally(() => setEventsLoading(false));
+  }, []);
+
+  const [selectedEvent, setSelectedEvent] = useState<ApiEvent | null>(null);
   const [eventsFilter, setEventsFilter] = useState<'all' | 'upcoming' | 'past'>('all');
 
   const filteredEvents = eventsFilter === 'all' ? events : events.filter(e => e.status === eventsFilter);
@@ -212,6 +119,12 @@ const Index = () => {
                 </Button>
               </div>
             </div>
+            {eventsLoading && (
+              <div className="text-center py-12 text-muted-foreground">
+                <Icon name="Loader" size={32} className="mx-auto mb-3 animate-spin opacity-50" />
+                <p>Загрузка мероприятий...</p>
+              </div>
+            )}
             <div className="grid md:grid-cols-2 gap-6">
               {filteredEvents.map((event) => (
                 <Card key={event.id} className="bg-card/50 backdrop-blur border-accent/20 hover:border-accent/50 transition-all hover-scale overflow-hidden">
@@ -236,7 +149,7 @@ const Index = () => {
                     <CardDescription className="text-muted-foreground flex items-center gap-4 flex-wrap">
                       <span className="flex items-center gap-1">
                         <Icon name="Calendar" size={14} />
-                        {event.date}{event.time ? ` • ${event.time}` : ''}
+                        {event.date_text}{event.time_text ? ` • ${event.time_text}` : ''}
                       </span>
                       <span className="flex items-center gap-1">
                         <Icon name="MapPin" size={14} />
@@ -260,7 +173,7 @@ const Index = () => {
                             <DialogHeader>
                               <DialogTitle>{selectedEvent?.title}</DialogTitle>
                               <DialogDescription>
-                                {selectedEvent?.date} в {selectedEvent?.time} • {selectedEvent?.location}
+                                {selectedEvent?.date_text}{selectedEvent?.time_text ? ` в ${selectedEvent.time_text}` : ''} • {selectedEvent?.location}
                               </DialogDescription>
                             </DialogHeader>
                             <div className="space-y-4 py-4">

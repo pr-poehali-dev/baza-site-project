@@ -39,13 +39,13 @@ const Index = () => {
     },
     {
       id: 3,
-      title: 'Выставка «Город внутри»',
+      title: 'Мастер-класс «Пуговки-цветочки»',
       date: '1 марта',
-      time: '12:00',
-      category: 'Выставка',
-      description: 'Выставка работ резидентов Базы — живопись, графика, фотография и инсталляции о жизни в Нижнекамске.',
-      image: 'https://cdn.poehali.dev/projects/3f3d9455-fca0-4e12-951d-4faa125851e6/files/28cccb68-cd50-4726-99b0-3b7f65e9e1c5.jpg',
-      location: 'Лесная, 53',
+      time: '',
+      category: 'Творчество',
+      description: 'Создаём цветочные композиции из пластиковых пуговиц и превращаем переработанный материал в стильный декор. Идеальный подарок к 8 Марта — красивый и осознанный.',
+      image: 'https://cdn4.telesco.pe/file/oF-hkydNqAdzGzGrwO5sATYlNS4jYvlKmHus_TuhNsmPD7J6XRmBBFqVNihZIPTorUXiHhqtmZCyZ74JDzn9TCXIQF_84LTRSEuMxhkmpxaYOFztYxpzzopi5pCcs0o38TuFmYwVOPb-aLe9MSIC_rVVrxwDRfkB9BjdJlJ37QlG8Jl2jaFCbM-GS7HfxRniMYOGqFvcB_Fp5KXlopNIfyKFkhjplsbcvIcT-qlz4cxeOqhk9MJwpxYxY3628U_MtvCS1LS4i6hZe27m2IF5p-HvPgif5B08vYuoPsjQ8Uvykbbkr7hwLmtJtVQ-YYvc8HiwJmE11SsPOsANy2BA1A.jpg',
+      location: 'Лесная, 55',
       price: 'Бесплатно',
       status: 'upcoming' as const,
       contact: '+79272463896',
@@ -197,7 +197,7 @@ const Index = () => {
                     <CardDescription className="text-muted-foreground flex items-center gap-4 flex-wrap">
                       <span className="flex items-center gap-1">
                         <Icon name="Calendar" size={14} />
-                        {event.date} • {event.time}
+                        {event.date}{event.time ? ` • ${event.time}` : ''}
                       </span>
                       <span className="flex items-center gap-1">
                         <Icon name="MapPin" size={14} />

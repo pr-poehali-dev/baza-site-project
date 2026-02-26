@@ -64,18 +64,22 @@ export default function Index() {
   const [events, setEvents]               = useState<ApiEvent[]>([]);
   const [eventsLoading, setEventsLoading] = useState(false);
   const [eventsFilter, setEventsFilter]   = useState<'all' | 'upcoming' | 'past'>('all');
-  const [selectedEvent, setSelectedEvent] = useState<ApiEvent | null>(null);
 
   useEffect(() => {
     setEventsLoading(true);
     fetch(EVENTS_API)
       .then(r => r.json())
-      .then(d => setEvents(d))
+      .then(d => setEvents(Array.isArray(d) ? d : []))
+      .catch(() => setEvents([]))
       .finally(() => setEventsLoading(false));
   }, []);
 
   const filtered = eventsFilter === 'all' ? events : events.filter(e => e.status === eventsFilter);
-  const go = (id: string) => { setActiveSection(id); setMobileOpen(false); };
+  const go = (id: string) => {
+    setActiveSection(id);
+    setMobileOpen(false);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
   const renderContent = () => {
     switch (activeSection) {
@@ -125,25 +129,39 @@ export default function Index() {
                   {ev.status === 'upcoming' && (
                     <Dialog>
                       <DialogTrigger asChild>
-                        <button onClick={() => setSelectedEvent(ev)}
-                          className="mt-3 font-['Oswald'] text-sm uppercase tracking-widest text-[#F5E642] hover:underline">
+                        <button className="mt-3 font-['Oswald'] text-sm uppercase tracking-widest text-[#F5E642] hover:underline">
                           Записаться →
                         </button>
                       </DialogTrigger>
                       <DialogContent className="bg-[#2d2f34] border-[#3a3c42] rounded-none">
                         <DialogHeader>
-                          <DialogTitle className="font-['Oswald'] text-2xl tracking-wide uppercase text-white">{selectedEvent?.title}</DialogTitle>
+                          <DialogTitle className="font-['Oswald'] text-2xl tracking-wide uppercase text-white">{ev.title}</DialogTitle>
                           <DialogDescription className="text-[#999] text-sm">
-                            {selectedEvent?.date_text}{selectedEvent?.time_text ? ` · ${selectedEvent.time_text}` : ''} · {selectedEvent?.location}
+                            {ev.date_text}{ev.time_text ? ` · ${ev.time_text}` : ''} · {ev.location}
                           </DialogDescription>
                         </DialogHeader>
                         <div className="space-y-4 mt-2">
-                          <p className="text-sm leading-relaxed text-[#ccc]">{selectedEvent?.description}</p>
+                          <p className="text-sm leading-relaxed text-[#ccc]">{ev.description}</p>
                           <Separator className="bg-[#3a3c42]" />
-                          <a href={`tel:${selectedEvent?.contact}`}
-                            className="flex items-center gap-2 text-[#F5E642] hover:underline font-['Oswald'] uppercase tracking-widest text-sm">
-                            <Icon name="Phone" size={16} />{selectedEvent?.contact}
-                          </a>
+                          {ev.contact && (
+                            <a href={`tel:${ev.contact}`}
+                              className="flex items-center gap-2 text-[#F5E642] hover:underline font-['Oswald'] uppercase tracking-widest text-sm">
+                              <Icon name="Phone" size={16} />{ev.contact}
+                            </a>
+                          )}
+                          <div className="pt-1">
+                            <p className="text-xs text-[#666] mb-3">Для записи свяжитесь с нами:</p>
+                            <div className="flex flex-col gap-2">
+                              <a href="tel:+79503171377"
+                                className="flex items-center gap-2 text-[#F5E642] hover:underline font-['Oswald'] uppercase tracking-widest text-sm">
+                                <Icon name="Phone" size={16} />+7 (950) 317‑13‑77
+                              </a>
+                              <a href="https://t.me/nkBaza" target="_blank" rel="noreferrer"
+                                className="flex items-center gap-2 text-[#F5E642] hover:underline font-['Oswald'] uppercase tracking-widest text-sm">
+                                <Icon name="Send" size={16} />Telegram @NKBAZA
+                              </a>
+                            </div>
+                          </div>
                         </div>
                       </DialogContent>
                     </Dialog>
@@ -357,14 +375,14 @@ export default function Index() {
 
           {/* Нижняя полоска */}
           <div className="grid sm:grid-cols-2 gap-px bg-[#3a3c42] mt-px">
-            <div className="bg-[#2d2f34] p-5 flex items-center gap-3">
+            <button onClick={() => go('contacts')} className="bg-[#2d2f34] p-5 flex items-center gap-3 hover:bg-[#333640] transition-colors text-left">
               <Icon name="MapPin" size={16} className="text-[#F5E642] shrink-0" />
               <p className="text-sm text-[#ccc]">г. Нижнекамск, ул. Лесная, 53</p>
-            </div>
-            <div className="bg-[#2d2f34] p-5 flex items-center gap-3">
+            </button>
+            <a href="tel:+79503171377" className="bg-[#2d2f34] p-5 flex items-center gap-3 hover:bg-[#333640] transition-colors">
               <Icon name="Phone" size={16} className="text-[#F5E642] shrink-0" />
               <p className="text-sm text-[#ccc]">+7 (950) 317‑13‑77</p>
-            </div>
+            </a>
           </div>
         </div>
       );

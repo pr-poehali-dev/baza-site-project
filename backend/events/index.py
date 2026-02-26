@@ -2,6 +2,7 @@ import json
 import os
 import urllib.request
 import psycopg2
+
 from psycopg2.extras import RealDictCursor
 
 SCHEMA = os.environ.get('MAIN_DB_SCHEMA', 't_p61000277_baza_site_project')

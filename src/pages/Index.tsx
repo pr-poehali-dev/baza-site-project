@@ -461,10 +461,10 @@ function BookingForm({ spaces, date, setDate }: BookingFormProps) {
     if (!name.trim() || !phone.trim()) return;
     setStatus('loading');
     try {
-      const res = await fetch(`${EVENTS_URL}/booking`, {
+      const res = await fetch(EVENTS_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, phone, date: dateStr, space, comment }),
+        body: JSON.stringify({ action: 'booking', name, phone, date: dateStr, space, comment }),
       });
       setStatus(res.ok ? 'ok' : 'error');
     } catch {

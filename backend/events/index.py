@@ -50,9 +50,11 @@ def handler(event: dict, context) -> dict:
     parts = [p for p in path.strip('/').split('/') if p]
     event_id = parts[1] if len(parts) >= 2 else None
 
-    # POST /booking — заявка на бронирование
-    if method == 'POST' and len(parts) >= 1 and parts[-1] == 'booking':
-        body    = json.loads(event.get('body') or '{}')
+    # POST booking — заявка на бронирование (action=booking в теле или /booking в пути)
+    body_raw = event.get('body') or '{}'
+    body_check = json.loads(body_raw)
+    if method == 'POST' and (parts[-1:] == ['booking'] or body_check.get('action') == 'booking'):
+        body    = body_check
         name    = body.get('name', '').strip()
         phone   = body.get('phone', '').strip()
         date    = body.get('date', '').strip()

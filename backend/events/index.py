@@ -1,5 +1,6 @@
 import json
 import os
+import urllib.request
 import psycopg2
 from psycopg2.extras import RealDictCursor
 
@@ -23,8 +24,23 @@ def check_admin(event):
     return token == ADMIN_TOKEN and ADMIN_TOKEN != ''
 
 
+def send_telegram(text: str) -> bool:
+    token   = os.environ.get('TELEGRAM_BOT_TOKEN', '')
+    chat_id = os.environ.get('TELEGRAM_CHAT_ID', '')
+    if not token or not chat_id:
+        return False
+    url     = f'https://api.telegram.org/bot{token}/sendMessage'
+    payload = json.dumps({'chat_id': chat_id, 'text': text, 'parse_mode': 'HTML'}).encode()
+    req     = urllib.request.Request(url, data=payload, headers={'Content-Type': 'application/json'}, method='POST')
+    try:
+        with urllib.request.urlopen(req, timeout=10) as resp:
+            return resp.status == 200
+    except Exception:
+        return False
+
+
 def handler(event: dict, context) -> dict:
-    """API для управления мероприятиями БАЗЫ. CRUD операции."""
+    """API для управления мероприятиями БАЗЫ. CRUD + отправка заявок в Telegram."""
     if event.get('httpMethod') == 'OPTIONS':
         return {'statusCode': 200, 'headers': CORS_HEADERS, 'body': ''}
 
@@ -32,6 +48,44 @@ def handler(event: dict, context) -> dict:
     path = event.get('path', '/')
     parts = [p for p in path.strip('/').split('/') if p]
     event_id = parts[1] if len(parts) >= 2 else None
+
+    # POST /booking — заявка на бронирование
+    if method == 'POST' and len(parts) >= 1 and parts[-1] == 'booking':
+        body    = json.loads(event.get('body') or '{}')
+        name    = body.get('name', '').strip()
+        phone   = body.get('phone', '').strip()
+        date    = body.get('date', '').strip()
+        space   = body.get('space', '').strip()
+        comment = body.get('comment', '').strip()
+
+        if not name or not phone:
+            return {
+                'statusCode': 400,
+                'headers': {**CORS_HEADERS, 'Content-Type': 'application/json'},
+                'body': json.dumps({'error': 'Имя и телефон обязательны'}),
+            }
+
+        lines = [
+            '🏛 <b>Новая заявка — БАЗА</b>', '',
+            f'👤 <b>Имя:</b> {name}',
+            f'📞 <b>Телефон:</b> {phone}',
+        ]
+        if date:    lines.append(f'📅 <b>Дата:</b> {date}')
+        if space:   lines.append(f'🏠 <b>Пространство:</b> {space}')
+        if comment: lines.append(f'💬 <b>Комментарий:</b> {comment}')
+
+        ok = send_telegram('\n'.join(lines))
+        if ok:
+            return {
+                'statusCode': 200,
+                'headers': {**CORS_HEADERS, 'Content-Type': 'application/json'},
+                'body': json.dumps({'ok': True}),
+            }
+        return {
+            'statusCode': 502,
+            'headers': CORS_HEADERS,
+            'body': json.dumps({'error': 'Ошибка отправки в Telegram'}),
+        }
 
     conn = get_conn()
     cur = conn.cursor()

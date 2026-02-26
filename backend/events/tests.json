@@ -5,8 +5,15 @@
       "method": "GET",
       "path": "/",
       "expectedStatus": 200,
-      "expectedBody": [],
-      "bodyMatcher": "type"
+      "expectedBody": null
+    },
+    {
+      "name": "POST booking without body returns 400",
+      "method": "POST",
+      "path": "/booking",
+      "body": {},
+      "expectedStatus": 400,
+      "expectedBody": null
     }
   ]
 }

@@ -223,19 +223,7 @@ export default function Index() {
       );
 
       // ── БРОНИРОВАНИЕ ────────────────────────────────────────────────
-      case 'booking': return (
-        <div className="animate-fade-in max-w-lg">
-          <PageHeader top="Бронирование" sub="Выберите дату" />
-          <div className="border border-[#3a3c42] p-6 bg-[#292b30]">
-            <Calendar mode="single" selected={date} onSelect={setDate}
-              className="mb-6 border border-[#3a3c42] rounded-none bg-transparent" />
-            <button className="w-full bg-[#F5E642] text-[#2d2f34] py-3 font-['Oswald'] text-base uppercase tracking-widest hover:bg-[#ffe818] transition-colors">
-              Отправить заявку
-            </button>
-            <p className="text-xs text-center text-[#666] mt-3">Онлайн-бронирование будет доступно в ближайшее время</p>
-          </div>
-        </div>
-      );
+      case 'booking': return <BookingForm spaces={spaces} date={date} setDate={setDate} />;
 
       // ── КОНТАКТЫ ────────────────────────────────────────────────────
       case 'contacts': return (
@@ -448,6 +436,117 @@ export default function Index() {
           </a>
         </div>
       </footer>
+    </div>
+  );
+}
+
+const EVENTS_URL = 'https://functions.poehali.dev/69176b78-d673-4802-b7ae-5739d7147e4c';
+
+interface BookingFormProps {
+  spaces: { name: string }[];
+  date: Date | undefined;
+  setDate: (d: Date | undefined) => void;
+}
+
+function BookingForm({ spaces, date, setDate }: BookingFormProps) {
+  const [name, setName]       = useState('');
+  const [phone, setPhone]     = useState('');
+  const [space, setSpace]     = useState('');
+  const [comment, setComment] = useState('');
+  const [status, setStatus]   = useState<'idle' | 'loading' | 'ok' | 'error'>('idle');
+
+  const dateStr = date ? date.toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' }) : '';
+
+  const submit = async () => {
+    if (!name.trim() || !phone.trim()) return;
+    setStatus('loading');
+    try {
+      const res = await fetch(`${EVENTS_URL}/booking`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, phone, date: dateStr, space, comment }),
+      });
+      setStatus(res.ok ? 'ok' : 'error');
+    } catch {
+      setStatus('error');
+    }
+  };
+
+  const inputCls = "w-full bg-[#242629] border border-[#3a3c42] px-4 py-3 text-white text-sm placeholder-[#555] focus:outline-none focus:border-[#F5E642] transition-colors";
+
+  if (status === 'ok') return (
+    <div className="animate-fade-in">
+      <PageHeader top="Заявка принята!" sub="Бронирование" />
+      <div className="border border-[#3a3c42] p-8 bg-[#292b30] text-center">
+        <div className="w-16 h-16 border border-[#F5E642] flex items-center justify-center mx-auto mb-5">
+          <Icon name="Check" size={28} className="text-[#F5E642]" />
+        </div>
+        <p className="font-['Oswald'] text-2xl text-white uppercase tracking-wide mb-2">Спасибо, {name}!</p>
+        <p className="text-sm text-[#999]">Мы свяжемся с вами в ближайшее время по номеру <span className="text-white">{phone}</span></p>
+        <button onClick={() => setStatus('idle')}
+          className="mt-6 border border-[#3a3c42] px-5 py-2 text-[#888] font-['Oswald'] text-xs uppercase tracking-widest hover:border-[#F5E642] hover:text-white transition-colors">
+          Отправить ещё
+        </button>
+      </div>
+    </div>
+  );
+
+  return (
+    <div className="animate-fade-in max-w-lg">
+      <PageHeader top="Бронирование" sub="Оставьте заявку" />
+      <div className="space-y-px">
+
+        {/* Выбор даты */}
+        <div className="border border-[#3a3c42] p-5 bg-[#292b30]">
+          <p className="font-['Oswald'] text-[10px] text-[#777] uppercase tracking-[0.25em] mb-3">Дата</p>
+          <Calendar mode="single" selected={date} onSelect={setDate}
+            className="border border-[#3a3c42] rounded-none bg-transparent" />
+          {dateStr && <p className="mt-2 text-xs text-[#F5E642] font-['Oswald'] tracking-wide">{dateStr}</p>}
+        </div>
+
+        {/* Поля */}
+        <div className="border border-[#3a3c42] p-5 bg-[#292b30] space-y-3">
+          <div>
+            <p className="font-['Oswald'] text-[10px] text-[#777] uppercase tracking-[0.25em] mb-1.5">Ваше имя *</p>
+            <input value={name} onChange={e => setName(e.target.value)} placeholder="Иван Иванов"
+              className={inputCls} />
+          </div>
+          <div>
+            <p className="font-['Oswald'] text-[10px] text-[#777] uppercase tracking-[0.25em] mb-1.5">Телефон *</p>
+            <input value={phone} onChange={e => setPhone(e.target.value)} placeholder="+7 (___) ___-__-__" type="tel"
+              className={inputCls} />
+          </div>
+          <div>
+            <p className="font-['Oswald'] text-[10px] text-[#777] uppercase tracking-[0.25em] mb-1.5">Пространство</p>
+            <select value={space} onChange={e => setSpace(e.target.value)}
+              className={`${inputCls} appearance-none cursor-pointer`}>
+              <option value="">— не выбрано —</option>
+              {spaces.map(s => <option key={s.name} value={s.name}>{s.name}</option>)}
+            </select>
+          </div>
+          <div>
+            <p className="font-['Oswald'] text-[10px] text-[#777] uppercase tracking-[0.25em] mb-1.5">Комментарий</p>
+            <textarea value={comment} onChange={e => setComment(e.target.value)} rows={3}
+              placeholder="Расскажите подробнее о вашем запросе..."
+              className={`${inputCls} resize-none`} />
+          </div>
+        </div>
+
+        {/* Кнопка */}
+        <button onClick={submit} disabled={status === 'loading' || !name.trim() || !phone.trim()}
+          className="w-full bg-[#F5E642] text-[#2d2f34] py-4 font-['Oswald'] text-base uppercase tracking-widest
+            hover:bg-[#ffe818] transition-colors disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-2">
+          {status === 'loading' ? (
+            <><Icon name="Loader" size={18} className="animate-spin" />Отправляем...</>
+          ) : 'Отправить заявку →'}
+        </button>
+
+        {status === 'error' && (
+          <p className="text-center text-sm text-red-400 pt-2">
+            Ошибка отправки. Позвоните нам: <a href="tel:+79503171377" className="underline">+7 (950) 317‑13‑77</a>
+          </p>
+        )}
+      </div>
     </div>
   );
 }

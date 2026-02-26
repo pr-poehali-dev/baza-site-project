@@ -25,19 +25,22 @@ def check_admin(event):
     return token == ADMIN_TOKEN and ADMIN_TOKEN != ''
 
 
-def send_telegram(text: str) -> bool:
+def send_telegram(text: str) -> str | None:
     token   = os.environ.get('TELEGRAM_BOT_TOKEN', '')
     chat_id = os.environ.get('TELEGRAM_CHAT_ID', '')
     if not token or not chat_id:
-        return False
+        return f'Секреты не заданы: token={bool(token)}, chat_id={bool(chat_id)}'
     url     = f'https://api.telegram.org/bot{token}/sendMessage'
     payload = json.dumps({'chat_id': chat_id, 'text': text, 'parse_mode': 'HTML'}).encode()
     req     = urllib.request.Request(url, data=payload, headers={'Content-Type': 'application/json'}, method='POST')
     try:
         with urllib.request.urlopen(req, timeout=10) as resp:
-            return resp.status == 200
-    except Exception:
-        return False
+            result = json.loads(resp.read())
+            print(f'Telegram OK: {result}')
+            return None
+    except Exception as e:
+        print(f'Telegram ERROR: {e}')
+        return str(e)
 
 
 def handler(event: dict, context) -> dict:
@@ -77,17 +80,18 @@ def handler(event: dict, context) -> dict:
         if space:   lines.append(f'🏠 <b>Пространство:</b> {space}')
         if comment: lines.append(f'💬 <b>Комментарий:</b> {comment}')
 
-        ok = send_telegram('\n'.join(lines))
-        if ok:
+        err = send_telegram('\n'.join(lines))
+        if err:
+            print(f'BOOKING ERROR: {err}')
             return {
-                'statusCode': 200,
+                'statusCode': 502,
                 'headers': {**CORS_HEADERS, 'Content-Type': 'application/json'},
-                'body': json.dumps({'ok': True}),
+                'body': json.dumps({'error': err}),
             }
         return {
-            'statusCode': 502,
-            'headers': CORS_HEADERS,
-            'body': json.dumps({'error': 'Ошибка отправки в Telegram'}),
+            'statusCode': 200,
+            'headers': {**CORS_HEADERS, 'Content-Type': 'application/json'},
+            'body': json.dumps({'ok': True}),
         }
 
     conn = get_conn()
